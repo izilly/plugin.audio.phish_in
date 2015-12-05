@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.audio.phish_in"
-version="0.1.1"
-name="phish_in"
-provider-name="izilly">
-<requires>
-  <import addon="xbmc.python" version="2.0"/>
-</requires>
-<extension point="xbmc.python.pluginsource" library="addon.py">
-  <provides>audio</provides>
-</extension>
-<extension point="xbmc.addon.metadata">
-  <summary lang="en">phish_in</summary>
-  <description lang="en">phish_in</description>
-</extension>
+<addon
+    id="plugin.audio.phish_in"
+    version="0.1.1"
+    name="Phish.in"
+    provider-name="izilly/fenningenarius">
+  <requires>
+    <import addon="xbmc.python" version="2.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Play any Phish show avilable at www.phish.in</summary>
+    <description lang="en">Play any Phish show avilable at www.phish.in. Uses the phish.in public api (http://phish.in/api-docs)</description>
+    <language></language>
+    <platform>all</platform>
+    <license>Modified BSD License</license>
+    <forum></forum>
+    <website></website>
+    <email></email>
+    <source></source>
+  </extension>
 </addon>
