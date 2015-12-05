@@ -15,6 +15,7 @@ import os.path
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
+from datetime import timedelta
 
 #from pudb.remote import set_trace
 #set_trace(term_size=(160, 60))
@@ -144,10 +145,32 @@ class RespShowBasic(Resp):
 
 class RespTrack(Resp):
     def get_label(self):
-        set_num = self.data['set']
-        num = self.data['position']
-        title = self.data['title']
-        return '{}.{} {}'.format(set_num, num, title)
+        self.get_info()
+        return '{:02d}. {}'.format(self.num, self.title)
+
+    def get_info(self):
+        self.title = self.data['title']
+        self.set_num = self.data.get('set')
+        self.num = self.data.get('position')
+        if self.num:
+            self.num = int(self.num)
+        self.duration = self.data.get('duration')
+        if self.duration:
+            self.duration = float(self.duration) / 1000.0
+
+    def add_info(self):
+        self.li.list_item.setInfo('music', {'title': self.title,
+                                  'tracknumber': self.num,
+                                  'artist': 'Phish',
+                                  'genre': 'Rock',
+                                  'duration': int(self.duration),
+                                 })
+
+    def get_duration(self, milliseconds):
+        td = timedelta(milliseconds=milliseconds)
+        h,m,s = td.__str__().split(':')
+
+
 
     def get_url_params(self):
         return {'item_type': 'track',
@@ -157,12 +180,13 @@ class RespTrack(Resp):
         return False
 
     def get_dir_item(self):
-        li = ListItem(self.label,
+        self.li = ListItem(self.label,
                       self.url_params,
                       self.fanart,
                       self.thumb,
                       self.is_folder)
-        return li.get_dir_item()
+        self.add_info()
+        return self.li.get_dir_item()
 
 
 def handle_years(params):
@@ -207,7 +231,7 @@ def handle_show(params):
         list_items.append(di)
     xbmcplugin.addDirectoryItems(_HANDLE, list_items, len(list_items))
     xbmcplugin.addSortMethod(_HANDLE,
-                             xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+                             xbmcplugin.SORT_METHOD_TRACKNUM)
     xbmcplugin.endOfDirectory(_HANDLE)
 
 def handle_track(params):
