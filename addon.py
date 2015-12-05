@@ -60,10 +60,12 @@ class ListItem(object):
 
     def add_list_item(self):
         li = xbmcgui.ListItem(label=self.label)
-        if self.thumb:
-            li.setArt({'thumb': self.thumb})
-        if self.fanart:
-            li.setArt({'fanart': self.fanart})
+        # todo: use different method if possible, not setArt()
+        #       (setArt() failed on my oldish xbmc box I tried)
+        #if self.thumb:
+            #li.setArt({'thumb': self.thumb})
+        #if self.fanart:
+            #li.setArt({'fanart': self.fanart})
         if not self.is_folder:
             li.setProperty('IsPlayable', 'true')
         self.list_item = li
