@@ -23,7 +23,6 @@ import xbmcaddon
 _URL = sys.argv[0]
 # Get the plugin handle as an integer number.
 _HANDLE = int(sys.argv[1])
-localize = xbmcaddon.Addon().getLocalizedString
 
 API_ADDRESS = 'http://phish.in/api/v1'
 PLUGIN_NAME = os.path.basename(_URL)
@@ -32,6 +31,10 @@ FANART = ADDON.getAddonInfo('fanart')
 
 URLOPENER = urllib2.build_opener()
 URLOPENER.addheaders = [('Content-Type', 'application/json')]
+
+
+def localize(string_id):
+    return xbmcaddon.Addon().getLocalizedString(string_id).encode('utf-8')
 
 
 class ListItem(object):
@@ -226,7 +229,7 @@ def handle_track(params):
 
 
 def add_year_cat():
-    label = 'Years'
+    label = localize(30001)
     url_params = {'endpoint': 'years',
                   'item_type': 'years'}
     li = ListItem(label,
