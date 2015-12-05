@@ -29,6 +29,9 @@ API_ADDRESS = 'http://phish.in/api/v1'
 PLUGIN_NAME = os.path.basename(_URL)
 ADDON = xbmcaddon.Addon(PLUGIN_NAME)
 FANART = ADDON.getAddonInfo('fanart')
+ICON = ADDON.getAddonInfo('icon')
+#THUMB = 'https://i.ytimg.com/vi/Kz9oqbpNDKk/maxresdefault.jpg'
+THUMB = os.path.join(ADDON.getAddonInfo('path').decode('utf-8'), 'thumb.jpg')
 
 URLOPENER = urllib2.build_opener()
 URLOPENER.addheaders = [('Content-Type', 'application/json')]
@@ -62,10 +65,13 @@ class ListItem(object):
         li = xbmcgui.ListItem(label=self.label)
         # todo: use different method if possible, not setArt()
         #       (setArt() failed on my oldish xbmc box I tried)
-        #if self.thumb:
+        if self.thumb:
+            li.setThumbnailImage(self.thumb)
             #li.setArt({'thumb': self.thumb})
-        #if self.fanart:
+        if self.fanart:
             #li.setArt({'fanart': self.fanart})
+            #li.setProperty('fanart_image', my_addon.getAddonInfo('fanart'))
+            li.setProperty('fanart_image', self.fanart)
         if not self.is_folder:
             li.setProperty('IsPlayable', 'true')
         self.list_item = li
@@ -88,7 +94,7 @@ class Resp(object):
         self.is_folder = self.get_is_folder()
 
     def get_art(self):
-        return FANART, None
+        return FANART, THUMB
 
     def get_is_folder(self):
         return True
