@@ -158,6 +158,7 @@ class RespTrack(Resp):
 
     def get_info(self):
         self.title = self.data['title']
+        self.album = self.data.get('album')
         self.set_num = self.data.get('set')
         self.num = self.data.get('position')
         if self.num:
@@ -169,6 +170,7 @@ class RespTrack(Resp):
     def add_info(self):
         self.li.list_item.setInfo('music', {'title': self.title,
                                   'tracknumber': self.num,
+                                  'album': self.album,
                                   'artist': 'Phish',
                                   'genre': 'Rock',
                                   'duration': int(self.duration),
@@ -231,9 +233,14 @@ def handle_show(params):
     endpoint_arg = params.get('endpoint_arg')
     resp = get_api_resp(endpoint, endpoint_arg)
     show = resp['data']
+    showdate = show['date']
+    venue = show['venue']['name']
+    city = show['venue']['location']
+    album = '{} {}, {}'.format(showdate, venue, city)
     tracks = show['tracks']
     list_items = []
     for t in tracks:
+        t['album'] = album
         r = RespTrack(t)
         di = r.get_dir_item()
         list_items.append(di)
