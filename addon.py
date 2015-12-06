@@ -213,6 +213,19 @@ def handle_years(params):
                              xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
     xbmcplugin.endOfDirectory(_HANDLE)
 
+def handle_random(params):
+    endpoint = params.get('endpoint')
+    resp = get_api_resp(endpoint)
+    show = resp['data']
+    list_items = []
+    r = RespShow(show)
+    di = r.get_dir_item()
+    list_items.append(di)
+    xbmcplugin.addDirectoryItems(_HANDLE, list_items, len(list_items))
+    xbmcplugin.addSortMethod(_HANDLE,
+                             xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+    xbmcplugin.endOfDirectory(_HANDLE)
+
 def handle_year(params):
     endpoint = params.get('endpoint')
     endpoint_arg = params.get('endpoint_arg')
@@ -266,6 +279,13 @@ def handle_track(params):
     xbmcplugin.setResolvedUrl(_HANDLE, True, listitem=list_item)
 
 
+def add_categories():
+    categories = []
+    categories.append(add_year_cat())
+    categories.append(add_random_cat())
+    xbmcplugin.addDirectoryItems(_HANDLE, categories, len(categories))
+    xbmcplugin.addSortMethod(_HANDLE, xbmcplugin.SORT_METHOD_NONE)
+    xbmcplugin.endOfDirectory(_HANDLE)
 
 def add_year_cat():
     label = localize(30001)
@@ -274,9 +294,16 @@ def add_year_cat():
     li = ListItem(label,
                   url_params)
     di = li.get_dir_item()
-    xbmcplugin.addDirectoryItems(_HANDLE, [di], 1)
-    xbmcplugin.addSortMethod(_HANDLE, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
-    xbmcplugin.endOfDirectory(_HANDLE)
+    return di
+
+def add_random_cat():
+    label = localize(30005)
+    url_params = {'endpoint': 'random-show',
+                  'item_type': 'random-show'}
+    li = ListItem(label,
+                  url_params)
+    di = li.get_dir_item()
+    return di
 
 def router(paramstring):
     """
@@ -294,18 +321,19 @@ def router(paramstring):
     # Check the parameters passed to the plugin
     if params:
         if params.get('content_type') and len(params) == 1:
-            add_year_cat()
+            add_categories()
             return True
         it = params.get('item_type')
         if it == 'years':
             handle_years(params)
+        elif it == 'random-show':
+            handle_random(params)
         elif it == 'year':
             handle_year(params)
         elif it == 'show':
             handle_show(params)
         elif it == 'track':
             handle_track(params)
-
         elif params['action'] == 'listing':
             # Display the list of items in a given category.
             list_items(params['category'])
@@ -315,7 +343,7 @@ def router(paramstring):
     else:
         # If the plugin is called from Kodi UI without any parameters,
         # display the list of categories
-        add_year_cat()
+        add_categories()
 
 def urljoin(parts):
     joined = '/'.join(s.strip('/') for s in parts)
