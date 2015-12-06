@@ -5,7 +5,7 @@
     name="Phish.in"
     provider-name="izilly/fenningenarius">
   <requires>
-    <import addon="xbmc.python" version="2.0"/>
+    <import addon="xbmc.python" version="2.1.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>audio</provides>
