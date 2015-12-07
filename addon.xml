@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.audio.phish_in"
-    version="0.1.6"
+    version="1.0.0"
     name="Phish.in"
     provider-name="izilly/fenningenarius">
   <requires>
@@ -16,9 +16,9 @@
     <language></language>
     <platform>all</platform>
     <license>Modified BSD License</license>
-    <forum></forum>
-    <website></website>
+    <forum>http://forum.kodi.tv/showthread.php?tid=251005</forum>
+    <website>https://github.com/izilly/plugin.audio.phish_in</website>
+    <source>https://github.com/izilly/plugin.audio.phish_in</source>
     <email></email>
-    <source></source>
   </extension>
 </addon>
