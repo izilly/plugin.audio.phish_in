@@ -66,12 +66,13 @@ class ListItem(object):
         # todo: use different method if possible, not setArt()
         #       (setArt() failed on my oldish xbmc box I tried)
         if self.thumb:
-            li.setThumbnailImage(self.thumb)
+            #li.setThumbnailImage(self.thumb)
+            li.setArt({'thumb': self.thumb})
             #li.setArt({'thumb': self.thumb})
         if self.fanart:
-            #li.setArt({'fanart': self.fanart})
+            li.setArt({'fanart': self.fanart})
             #li.setProperty('fanart_image', my_addon.getAddonInfo('fanart'))
-            li.setProperty('fanart_image', self.fanart)
+            #li.setProperty('fanart_image', self.fanart)
         if not self.is_folder:
             li.setProperty('IsPlayable', 'true')
         self.list_item = li
