@@ -1,3 +1,5 @@
+1.0.1 (2015-12-07)
+  - use ListItem.setArt() rather than .setProperty()
 1.0.0 (2015.12.06)
   - first public release
 
