@@ -160,22 +160,35 @@ class RespTrack(Resp):
     def get_info(self):
         self.title = self.data['title']
         self.album = self.data.get('album')
+        self.artist = self.data.get('artist')
+        if not self.artist:
+            self.artist = 'Phish'
         self.set_num = self.data.get('set')
         self.num = self.data.get('position')
         if self.num:
             self.num = int(self.num)
         self.duration = self.data.get('duration')
         if self.duration:
-            self.duration = float(self.duration) / 1000.0
+            self.duration = int(self.duration/1000)
+        self.genre = 'Rock'
 
     def add_info(self):
-        self.li.list_item.setInfo('music', {'title': self.title,
-                                  'tracknumber': self.num,
-                                  'album': self.album,
-                                  'artist': 'Phish',
-                                  'genre': 'Rock',
-                                  'duration': int(self.duration),
-                                 })
+        # this doesn't work anymore on my system:
+        #info = {'title': self.title,
+                #'tracknumber': self.num,
+                #'duration': self.duration,
+                #'album': self.album,
+                #'artist': self.artist,
+                #'genre': self.genre,}
+        #self.li.list_item.setInfo('music', info)
+
+        # this works fine:
+        self.li.list_item.setInfo('music', {'title': self.title})
+        self.li.list_item.setInfo('music', {'tracknumber': self.num})
+        self.li.list_item.setInfo('music', {'duration': self.duration})
+        self.li.list_item.setInfo('music', {'album': self.album})
+        self.li.list_item.setInfo('music', {'artist': self.artist})
+        self.li.list_item.setInfo('music', {'genre': self.genre})
 
     def get_duration(self, milliseconds):
         td = timedelta(milliseconds=milliseconds)
@@ -259,6 +272,7 @@ def handle_show(params):
         di = r.get_dir_item()
         list_items.append(di)
     xbmcplugin.addDirectoryItems(_HANDLE, list_items, len(list_items))
+    xbmcplugin.setContent(_HANDLE, 'songs')
     xbmcplugin.addSortMethod(_HANDLE,
                              xbmcplugin.SORT_METHOD_TRACKNUM)
     xbmcplugin.endOfDirectory(_HANDLE)
@@ -276,6 +290,7 @@ def handle_track(params):
     # todo inspect params['path'] to see what a value looks like.
     # Create a playable item with a path to play.
     list_item = xbmcgui.ListItem(path=params['path'])
+    xbmcplugin.setContent(_HANDLE, 'songs')
     # Pass the item to the Kodi player.
     xbmcplugin.setResolvedUrl(_HANDLE, True, listitem=list_item)
 
